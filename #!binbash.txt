@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Prompt the user for the directory they want to organize
+read -p "Enter the directory to organize (press enter for current directory): " directory
+
+# Use the current working directory if the user did not provide a directory
+if [[ -z $directory ]]; then
+    directory=$(pwd)
+fi
+
+# Create subdirectories for each file type
+mkdir -p "$directory/Images"
+mkdir -p "$directory/Texts"
+mkdir -p "$directory/Documents"
+mkdir -p "$directory/Code"
+
+# Move files into the corresponding subdirectory based on file type
+find "$directory" -maxdepth 1 -type f -name "*.jpg" -exec mv {} "$directory/Images" \;
+find "$directory" -maxdepth 1 -type f -name "*.png" -exec mv {} "$directory/Images" \;
+find "$directory" -maxdepth 1 -type f -name "*.txt" -exec mv {} "$directory/Texts" \;
+find "$directory" -maxdepth 1 -type f -name "*.pdf" -exec mv {} "$directory/Documents" \;
+find "$directory" -maxdepth 1 -type f -name "*.docx" -exec mv {} "$directory/Documents" \;
+find "$directory" -maxdepth 1 -type f -name "*.py" -exec mv {} "$directory/Code" \;
+find "$directory" -maxdepth 1 -type f -name "*.sh" -exec mv {} "$directory/Code" \;
+
+# Print a message indicating how many files were moved and to which directories
+echo "File organization complete. Files moved:"
+echo "$(ls "$directory/Images" | wc -l) images moved to $directory/Images"
+echo "$(ls "$directory/Texts" | wc -l) text files moved to $directory/Texts"
+echo "$(ls "$directory/Documents" | wc -l) documents moved to $directory/Documents"
+echo "$(ls "$directory/Code" | wc -l) code files moved to $directory/Code"
